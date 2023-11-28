@@ -69,12 +69,15 @@ class Explosion(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.rect.center = (x, y)
-        self.speed = random.uniform(SLOW_SPEED, FAST_SPEED)
+
 
     def update(self):
-        self.x -= self.speed
-        self.rect.x = self.x
+        count = 5
+        for event in pygame.event.get():
+            count -= 1
+            if count <= 0:
+                self.kill()
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-explosion = pygame.sprite.Group()
+explosions = pygame.sprite.Group()

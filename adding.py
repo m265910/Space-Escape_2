@@ -1,7 +1,7 @@
 import pygame
 import random
 from game_parameters import *
-from planets import Blue_Planet, Purple_Planet, blue_planets, purple_planets, Explosion, explosion
+from planets import Blue_Planet, Purple_Planet, blue_planets, purple_planets, Explosion, explosions
 from bad_guys import Bad_Ship1, bad_ships1, bad_ships2, Bad_Ship2
 from lasers import lasers1, Laser
 
@@ -24,7 +24,7 @@ def spawn_bad2(number):
 
 def spawn_explosion(number, x, y):
     for i in range(number):
-        explosion.add(Explosion(x, y))
+        explosions.add(Explosion(x, y))
 
 def spawn_lasers1(number,x, y, angle):
     for i in range(number):

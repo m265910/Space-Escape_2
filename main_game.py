@@ -5,7 +5,7 @@ import random
 from game_parameters import *
 from create_background import draw_space
 from adding import spawn_blue, spawn_purple, spawn_bad1, spawn_bad2, spawn_explosion, spawn_lasers1
-from planets import purple_planets, blue_planets, Blue_Planet, Purple_Planet, explosion, Explosion
+from planets import purple_planets, blue_planets, Blue_Planet, Purple_Planet, explosions, Explosion
 from bad_guys import Bad_Ship1, bad_ships1, Bad_Ship2, bad_ships2
 from players import Player1, Player2
 from math import atan2
@@ -25,6 +25,9 @@ player2_heart_new_size = player2_heart_new.get_size()
 player2_heart_new_new_size = (player2_heart_new_size[0] / 11, player2_heart_new_size[1] / 11)
 player2_heart = pygame.transform.scale(player2_heart_new, player2_heart_new_new_size)
 player2_heart.set_colorkey((0,0,0))
+
+background_sound = pygame.mixer.Sound("ES_Trickster's Birthday - Chibi Power.wav")
+boom_sound = pygame.mixer.Sound("explosion.wav")
 
 player1_lives = 3
 player2_lives = 3
@@ -53,7 +56,7 @@ def spawn_welcome(screen):
 draw_intro = True
 
 clock = pygame.time.Clock()
-countdown = 10
+countdown = 20
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 winning_text = game_font.render("!!YOU ESCAPED!!", True, (255, 255, 255))
 losing_text = game_font.render("GAME OVER", True, (255, 255, 255))
@@ -62,6 +65,7 @@ background = screen.copy()
 draw_space(background)
 running = True
 while running:
+    pygame.mixer.Sound.play(background_sound)
     if draw_intro:
         draw_intro = False
         spawn_welcome(screen)
@@ -87,8 +91,8 @@ while running:
             running = False
         if event.type == pygame.USEREVENT:
             countdown -= 1
-            count = instructions_font.render(f"{countdown}", True, (155, 155, 255))
-            screen.blit(count, (1.5*count.get_width(), SCREEN_HEIGHT - 1.5*count.get_height()))
+            count = instructions_font.render(f"{countdown}", True, (255, 255, 255))
+            screen.blit(count, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
             if countdown <= 0:
                 screen.blit(background, (0,0))
                 screen.blit(winning_text, (SCREEN_WIDTH/2 - winning_text.get_width()/2 , SCREEN_HEIGHT/2 - winning_text.get_height()/2 ))
@@ -129,6 +133,7 @@ while running:
     player1.update()
     player2.update()
     lasers1.update(player1)
+    explosions.update()
 
     for i in bad_ships1:
         y1 = i.y - player1.y
@@ -218,30 +223,22 @@ while running:
             if blue_ship:
                 pos = bad.rect.midright
                 bad_ships1.remove(bad)
-                spawn_explosion(1, pos[0], pos[1])
-                countdown = 5
-                # if event.type == pygame.USEREVENT:
-                #     countdown -= 1
-                #     if countdown <= 0:
-                #         explosion.remove()
-                spawn_bad1(1)
                 blue_planets.remove(blue)
-                # explosion.remove(explosion)
+                # spawn_explosion(1, pos[0], pos[1])
+                pygame.mixer.Sound.play(boom_sound)
+                spawn_bad1(1)
+                spawn_blue(1)
 
             for bad in bad_ships2:
                 blue_ship = pygame.sprite.spritecollide(blue, bad_ships2, True)
                 if blue_ship:
                     pos = bad.rect.midright
                     bad_ships2.remove(bad)
-                    spawn_explosion(1, pos[0], pos[1])
-                    countdown = 5
-                    # if event.type == pygame.USEREVENT:
-                    #     countdown -= 1
-                    #     if countdown <= 0:
-                    #         explosion.remove()
-                    spawn_bad2(1)
                     blue_planets.remove(blue)
-                    # explosion.remove(explosion)
+                    pygame.mixer.Sound.play(boom_sound)
+                    spawn_bad2(1)
+                    spawn_blue(1)
+
 
 
     for purple in purple_planets:
@@ -265,7 +262,8 @@ while running:
     bad_ships2.draw(screen)
     player1.draw(screen)
     player2.draw(screen)
-    explosion.draw(screen)
+    explosions.draw(screen)
+
     for i in lasers1:
         i.draw_laser(screen)
 
