@@ -36,7 +36,7 @@ class Purple_Planet(pygame.sprite.Sprite):
 
         self.new_image = pygame.image.load("purple_planet.png").convert()
         self.size = self.new_image.get_size()
-        self.new_size = (self.size[0] / 2, self.size[1] / 2)
+        self.new_size = (self.size[0] / 2.3, self.size[1] / 2.3)
         self.image = pygame.transform.scale(self.new_image, self.new_size)
         self.image.set_colorkey((0, 0, 0))
 
