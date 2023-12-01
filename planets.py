@@ -71,13 +71,6 @@ class Explosion(pygame.sprite.Sprite):
         self.rect.center = (x, y)
 
 
-    def update(self):
-        count = 5
-        for event in pygame.event.get():
-            count -= 1
-            if count <= 0:
-                self.kill()
-
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 explosions = pygame.sprite.Group()

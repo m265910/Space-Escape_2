@@ -10,7 +10,7 @@ from bad_guys import Bad_Ship1, bad_ships1, Bad_Ship2, bad_ships2
 from players import Player1, Player2
 from math import atan2
 from lasers import lasers1, Laser
-# from messages import spawn_wave1
+
 
 pygame.init()
 pygame.mixer.init()
@@ -28,9 +28,9 @@ player2_heart_new_new_size = (player2_heart_new_size[0] / 11, player2_heart_new_
 player2_heart = pygame.transform.scale(player2_heart_new, player2_heart_new_new_size)
 player2_heart.set_colorkey((0,0,0))
 
-background_sound = pygame.mixer.Sound("ES_Trickster's Birthday - Chibi Power.wav")
-boom_sound = pygame.mixer.Sound("explosion.wav")
-hit = pygame.mixer.Sound("hurt.wav")
+
+boom_sound = pygame.mixer.Sound("new_boom.wav")
+hit = pygame.mixer.Sound("ship_hurt.mp3")
 
 player1_lives = 3
 player2_lives = 3
@@ -78,7 +78,6 @@ background = screen.copy()
 draw_space(background)
 running = True
 while running:
-    pygame.mixer.Sound.play(background_sound)
     if draw_intro:
         draw_intro = False
         spawn_welcome(screen)
@@ -115,7 +114,6 @@ while running:
         if event.type == pygame.USEREVENT:
             countdown -= 1
 
-
             if countdown == 80:
                 draw_wave_2 = True
                 if draw_wave_2:
@@ -134,7 +132,6 @@ while running:
                         spawn_bad2(1)
                     spawn_bad1(1)
                     spawn_bad2(1)
-
 
             if countdown == 70:
                 draw_wave_3 = True
@@ -173,6 +170,10 @@ while running:
                         spawn_bad2(1)
                     spawn_bad1(1)
                     spawn_bad2(1)
+            if countdown == 50:
+                spawn_bad1(4)
+                spawn_bad2(4)
+                spawn_blue(2)
 
             if countdown <= 0:
                 screen.blit(background, (0,0))
@@ -207,19 +208,18 @@ while running:
 
 
 
-        # elif event.type == pygame.MOUSwwEBUTTONDOWN:
-        #     if pygame.mouse.get_pressed()[0]:
-        #         pos = player1.rect.midright
-        #         mouse_x, mouse_y = pygame.mouse.get_pos()
-        #         angle = - atan2(mouse_y - pos[1], mouse_x - pos[0])
-        #         spawn_lasers1(1, pos[0], pos[1], angle)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.mouse.get_pressed()[0]:
+                pos = player1.rect.midright
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                angle = - atan2(mouse_y - pos[1], mouse_x - pos[0])
+                spawn_lasers1(1, pos, angle)
 
     blue_planets.update()
     purple_planets.update()
     player1.update()
     player2.update()
     lasers1.update(player1)
-    explosions.update()
 
 
     for i in bad_ships1:
@@ -273,29 +273,6 @@ while running:
         spawn_purple(1)
 
 
-    for i in lasers1:
-        if i.rect.x > SCREEN_WIDTH:
-            lasers1.remove(i)
-
-        for bad1 in bad_ships1:
-            bad1_hit = pygame.sprite.spritecollide(i, bad_ships1, True)
-            if bad1_hit:
-                bad_ships1.remove(bad1)
-                lasers1.remove(i)
-                spawn_bad1(1)
-
-        for bad2 in bad_ships2:
-            bad2_hit = pygame.sprite.spritecollide(i, bad_ships2, True)
-            if bad2_hit:
-                bad_ships2.remove(bad2)
-                lasers1.remove(i)
-                spawn_bad2(1)
-
-
-
-
-
-
     players = [player1, player2]
     for player in players:
         if player.rect.x < 0:
@@ -313,6 +290,43 @@ while running:
             blue_planets.remove(blue)
             spawn_blue(1)
 
+    for laser in lasers1:
+        for i in lasers1:
+            if i.rect.x > SCREEN_WIDTH:
+                lasers1.remove(i)
+        for bad in bad_ships1:
+            laser1_bad1 = pygame.sprite.spritecollide(laser, bad_ships1, True)
+            if laser1_bad1:
+                x = bad.x
+                y = bad.y
+                new_count = 3
+                bad_ships1.remove(bad)
+                lasers1.remove(laser)
+                spawn_explosion(1, x, y)
+                pygame.display.flip()
+                pygame.mixer.Sound.play(boom_sound)
+                spawn_bad1(1)
+                for explosion in explosions:
+                    for event in pygame.event.get():
+                        if event.type == pygame.USEREVENT:
+                            new_count -= 1
+                            if countdown <= 0:
+                                explosions.kill(explosion)
+
+        for bad in bad_ships2:
+            laser1_bad2 = pygame.sprite.spritecollide(laser, bad_ships2, True)
+            if laser1_bad2:
+                bad_ships2.remove(bad)
+                lasers1.remove(laser)
+                pygame.mixer.Sound.play(boom_sound)
+                spawn_bad2(1)
+        for blue in blue_planets:
+            laser1_blue = pygame.sprite.spritecollide(laser, blue_planets, True)
+            if laser1_blue:
+                blue_planets.remove(blue)
+                lasers1.remove(laser)
+                pygame.mixer.Sound.play(boom_sound)
+                spawn_blue(1)
         # for bad in bad_ships1:
         #     blue_ship = pygame.sprite.spritecollide(blue, bad_ships1, True)
         #     if blue_ship:
@@ -360,8 +374,8 @@ while running:
     explosions.draw(screen)
 
 
-    for i in lasers1:
-        i.draw_laser(screen)
+    for laser in lasers1:
+        laser.draw_laser(screen)
 
     for i in range(player1_lives):
         screen.blit(player1_heart, (0.5*SPACE_TILE+(i*SPACE_TILE), 0.25*SPACE_TILE))
@@ -369,6 +383,8 @@ while running:
         screen.blit(player2_heart, (SCREEN_WIDTH - (SPACE_TILE+i*SPACE_TILE), 0.25*SPACE_TILE))
 
     pygame.display.flip()
+
+    clock.tick(420)
 
 pygame.quit()
 sys.exit()

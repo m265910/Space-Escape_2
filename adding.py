@@ -30,6 +30,6 @@ def spawn_explosion(number, x, y):
     for i in range(number):
         explosions.add(Explosion(x, y))
 
-def spawn_lasers1(number,x, y, angle):
+def spawn_lasers1(number, pos, angle):
     for i in range(number):
-        lasers1.add(Laser(number, x, y, angle))
+        lasers1.add(Laser(pos[0], pos[1], angle))

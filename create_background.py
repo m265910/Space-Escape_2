@@ -1,9 +1,14 @@
 import pygame
 import random
-from game_parameters import *
 
+import pygame.mixer
+
+from game_parameters import *
+pygame.mixer.init()
+background_sound = pygame.mixer.Sound("ES_Trickster's Birthday - Chibi Power.wav")
 def draw_space(screen):
     space = pygame.image.load("real_space.png").convert()
+    pygame.mixer.Sound.play(background_sound)
     #space.set_colorkey((0,0,0))
     for x in range(0, SCREEN_WIDTH, SPACE_TILE):
         for y in range(0, SCREEN_HEIGHT, SPACE_TILE):
