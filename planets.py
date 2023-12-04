@@ -70,6 +70,8 @@ class Explosion(pygame.sprite.Sprite):
         self.y = y
         self.rect.center = (x, y)
 
+    def kill(self):
+        self.remove()
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)

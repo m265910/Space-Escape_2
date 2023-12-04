@@ -3,7 +3,7 @@ import random
 from game_parameters import *
 from planets import Blue_Planet, Purple_Planet, blue_planets, purple_planets, Explosion, explosions
 from bad_guys import Bad_Ship1, bad_ships1, bad_ships2, Bad_Ship2
-from lasers import lasers1, Laser
+from lasers import lasers1, Laser, lasers2, Laser2
 from create_background import Space_Move, moving_space
 
 def spawn_blue(number):
@@ -33,3 +33,7 @@ def spawn_explosion(number, x, y):
 def spawn_lasers1(number, pos, angle):
     for i in range(number):
         lasers1.add(Laser(pos[0], pos[1], angle))
+
+def spawn_lasers2(number, pos):
+    for i in range(number):
+        lasers2.add(Laser2(pos[0], pos[1]))

@@ -20,3 +20,21 @@ class Laser(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (215, 53, 2), self.rect)
 
 lasers1 = pygame.sprite.Group()
+
+class Laser2(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.rect = pygame.Rect(0, 0, LASER2_WIDTH, LASER2_HEIGHT)
+        self.x = x
+        self.y = y
+
+
+    def update(self, player):
+        self.x += LASER_SPEED
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def draw_laser(self, screen):
+        pygame.draw.rect(screen, LASER2_COLOR, self.rect)
+
+lasers2 = pygame.sprite.Group()
