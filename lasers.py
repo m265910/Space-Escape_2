@@ -9,7 +9,7 @@ class Laser(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.angle = angle
-
+    # Update laser 1 in direction of mouse position upon click
     def update(self, player):
         self.x += LASER_SPEED * cos(self.angle)
         self.y -= LASER_SPEED * sin(self.angle)
@@ -18,7 +18,7 @@ class Laser(pygame.sprite.Sprite):
 
     def draw_laser(self, screen):
         pygame.draw.rect(screen, (215, 53, 2), self.rect)
-
+# Create sprite group
 lasers1 = pygame.sprite.Group()
 
 class Laser2(pygame.sprite.Sprite):
@@ -28,7 +28,7 @@ class Laser2(pygame.sprite.Sprite):
         self.x = x
         self.y = y
 
-
+    # Update laser 2 to move in +x direction upon pressing SPACEBAR
     def update(self, player):
         self.x += LASER_SPEED
         self.rect.x = self.x
@@ -36,5 +36,5 @@ class Laser2(pygame.sprite.Sprite):
 
     def draw_laser(self, screen):
         pygame.draw.rect(screen, LASER2_COLOR, self.rect)
-
+# Create sprite group
 lasers2 = pygame.sprite.Group()

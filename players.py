@@ -3,7 +3,7 @@ from game_parameters import *
 
 PLAYER_MAX = 3
 PLAYER_MIN = 0.5
-
+# Separate classes for each player
 class Player1(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
@@ -20,7 +20,7 @@ class Player1(pygame.sprite.Sprite):
         self.rect.center = (x, y)
         self.x_speed = 0
         self.y_speed = 0
-
+    # Stating motion commands for player1
     def move_up(self):
         self.y_speed = -1 * PLAYER_SPEED
     def move_down(self):
@@ -60,7 +60,7 @@ class Player2(pygame.sprite.Sprite):
         self.rect.center = (x, y)
         self.x_speed = 0
         self.y_speed = 0
-
+    # Stating motion commands for player2
     def move_up(self):
         self.y_speed = -1 * PLAYER_SPEED
     def move_down(self):
