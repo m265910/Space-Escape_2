@@ -35,7 +35,7 @@ hit = pygame.mixer.Sound("ship_hurt.mp3")
 player1_lives = 3
 player2_lives = 3
 spawn_blue(3)
-spawn_purple(3)
+spawn_purple(5)
 spawn_bad1(3)
 spawn_bad2(3)
 player1 = Player1(SCREEN_WIDTH/2, SCREEN_HEIGHT/4)
@@ -423,6 +423,7 @@ while running:
                 spawn_purple(1)
 
     # Remove purple planets if they leave the screen
+    # Hard
     for purple in purple_planets:
         if purple.rect.x < -purple.rect.width:
             purple_planets.remove(purple)
